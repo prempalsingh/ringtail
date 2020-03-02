@@ -1,7 +1,8 @@
-package com.prempal.ringtail
+package com.prempal.ringtail.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.prempal.ringtail.R
 
 class MainActivity : AppCompatActivity() {
 
