@@ -7,6 +7,6 @@ import com.prempal.ringtail.data.ApiClient
  */
 class AppContainer {
 
-    val apiService = ApiClient.create("https://api.github.com/repos/facebook/react-native/pulls?state=closed")
+    val apiService = ApiClient.create("https://api.github.com/repos/facebook/react-native/")
 
 }
