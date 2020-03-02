@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.prempal.ringtail.RingtailApplication
 import com.prempal.ringtail.ui.MainActivity
 import com.prempal.ringtail.ui.MainViewModel
+import com.prempal.ringtail.ui.rv.PullRequestsAdapter
 import com.prempal.ringtail.utils.ViewModelProviderFactory
 
 /**
@@ -23,5 +24,7 @@ object ActivityComponent {
                     appContainer.dispatcherProvider
                 )
             }).get(MainViewModel::class.java)
+
+        activity.adapter = PullRequestsAdapter()
     }
 }
