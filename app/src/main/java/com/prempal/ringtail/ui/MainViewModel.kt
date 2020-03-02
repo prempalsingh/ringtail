@@ -10,6 +10,7 @@ import com.prempal.ringtail.data.PullRequest
 import com.prempal.ringtail.utils.Event
 import com.prempal.ringtail.utils.coroutines.DispatcherProvider
 import kotlinx.coroutines.launch
+import okhttp3.Headers
 
 /**
  * Created by prempal on 3/2/20.
@@ -30,6 +31,7 @@ class MainViewModel(
 
     private var page = 1
     private var loadMoreEnabled = false
+    private var list = mutableListOf<PullRequest>()
 
     init {
         fetchPRs()
@@ -41,12 +43,14 @@ class MainViewModel(
 
     private fun fetchPRs() {
         _loading.postValue(true)
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcherProvider.default) {
             try {
                 val response = apiService.getClosedPRs(page)
                 val pullRequestsResponse = response.body()
                 if (response.isSuccessful && pullRequestsResponse != null) {
-                    _items.postValue(pullRequestsResponse)
+                    checkPagination(response.headers())
+                    list.addAll(pullRequestsResponse)
+                    _items.postValue(list)
                 } else {
                     _toastEvent.postValue(Event(R.string.error_fetching_prs))
                 }
@@ -55,6 +59,15 @@ class MainViewModel(
             } finally {
                 _loading.postValue(false)
             }
+        }
+    }
+
+    private fun checkPagination(headers: Headers) {
+        if (headers.get("Link")?.contains("rel=\"next\"") == true) {
+            page++
+            loadMoreEnabled = true
+        } else {
+            loadMoreEnabled = false
         }
     }
 }
