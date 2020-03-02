@@ -1,10 +1,14 @@
 package com.prempal.ringtail.ui.rv
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.prempal.ringtail.R
 import com.prempal.ringtail.data.PullRequestsResponse
 
@@ -14,10 +18,10 @@ import com.prempal.ringtail.data.PullRequestsResponse
 class PRViewHolder private constructor(v: View) : RecyclerView.ViewHolder(v) {
 
     private val authorImage = itemView.findViewById<ImageView>(R.id.pr_author_image)
-    private val authorName = itemView.findViewById<ImageView>(R.id.pr_author)
-    private val prTitle = itemView.findViewById<ImageView>(R.id.pr_title)
-    private val prCreatedAt = itemView.findViewById<ImageView>(R.id.pr_created_at)
-    private val prCloseddAt = itemView.findViewById<ImageView>(R.id.pr_closed_at)
+    private val authorName = itemView.findViewById<TextView>(R.id.pr_author)
+    private val prTitle = itemView.findViewById<TextView>(R.id.pr_title)
+    private val prCreatedAt = itemView.findViewById<TextView>(R.id.pr_created_at)
+    private val prClosedAt = itemView.findViewById<TextView>(R.id.pr_closed_at)
 
     companion object {
         fun from(parent: ViewGroup): PRViewHolder {
@@ -29,6 +33,14 @@ class PRViewHolder private constructor(v: View) : RecyclerView.ViewHolder(v) {
     }
 
     fun bind(pr: PullRequestsResponse) {
+        Glide.with(itemView.context)
+            .load(pr.user.avatarUrl)
+            .placeholder(ColorDrawable(Color.LTGRAY))
+            .into(authorImage)
 
+        authorName.text = pr.user.login
+        prTitle.text = pr.title
+        prClosedAt.text = pr.closedAt
+        prCreatedAt.text = pr.createdAt
     }
 }
