@@ -6,9 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.prempal.ringtail.R
 import com.prempal.ringtail.data.ApiService
-import com.prempal.ringtail.data.PullRequest
+import com.prempal.ringtail.ui.rv.PRUIModel
 import com.prempal.ringtail.utils.Event
 import com.prempal.ringtail.utils.coroutines.DispatcherProvider
+import com.prempal.ringtail.utils.mapResponseToUIModel
 import kotlinx.coroutines.launch
 import okhttp3.Headers
 
@@ -20,8 +21,8 @@ class MainViewModel(
     private val dispatcherProvider: DispatcherProvider
 ) : ViewModel() {
 
-    private val _items = MutableLiveData<List<PullRequest>>()
-    val items: LiveData<List<PullRequest>> = _items
+    private val _items = MutableLiveData<List<PRUIModel>>()
+    val items: LiveData<List<PRUIModel>> = _items
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
@@ -31,7 +32,7 @@ class MainViewModel(
 
     private var page = 1
     private var loadMoreEnabled = false
-    private var list = mutableListOf<PullRequest>()
+    private var list = mutableListOf<PRUIModel>()
 
     init {
         fetchPRs()
@@ -49,7 +50,7 @@ class MainViewModel(
                 val pullRequestsResponse = response.body()
                 if (response.isSuccessful && pullRequestsResponse != null) {
                     checkPagination(response.headers())
-                    list.addAll(pullRequestsResponse)
+                    list.addAll(mapResponseToUIModel(pullRequestsResponse))
                     _items.postValue(list)
                 } else {
                     _toastEvent.postValue(Event(R.string.error_fetching_prs))

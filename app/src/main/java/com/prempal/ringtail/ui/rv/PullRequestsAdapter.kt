@@ -3,12 +3,11 @@ package com.prempal.ringtail.ui.rv
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.prempal.ringtail.data.PullRequest
 
 /**
  * Created by prempal on 3/2/20.
  */
-class PullRequestsAdapter : ListAdapter<PullRequest, PRViewHolder>(PRDiffCallback()) {
+class PullRequestsAdapter : ListAdapter<PRUIModel, PRViewHolder>(PRDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PRViewHolder {
         return PRViewHolder.from(parent)
     }
@@ -19,12 +18,12 @@ class PullRequestsAdapter : ListAdapter<PullRequest, PRViewHolder>(PRDiffCallbac
     }
 }
 
-class PRDiffCallback : DiffUtil.ItemCallback<PullRequest>() {
-    override fun areItemsTheSame(oldItem: PullRequest, newItem: PullRequest): Boolean {
-        return oldItem.id == newItem.id
+class PRDiffCallback : DiffUtil.ItemCallback<PRUIModel>() {
+    override fun areItemsTheSame(oldItem: PRUIModel, newItem: PRUIModel): Boolean {
+        return oldItem === newItem
     }
 
-    override fun areContentsTheSame(oldItem: PullRequest, newItem: PullRequest): Boolean {
+    override fun areContentsTheSame(oldItem: PRUIModel, newItem: PRUIModel): Boolean {
         return oldItem == newItem
     }
 }
