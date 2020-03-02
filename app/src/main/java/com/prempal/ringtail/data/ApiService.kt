@@ -12,5 +12,5 @@ interface ApiService {
     @GET("pulls?state=closed")
     suspend fun getClosedPRs(
         @Query("page") page: Int
-    ): Response<PullRequestsResponse>
+    ): Response<List<PullRequest>>
 }

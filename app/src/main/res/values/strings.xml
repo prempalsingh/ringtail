@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Ringtail</string>
+    <string name="error_fetching_prs">Error fetching PRs from server</string>
 </resources>

@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 /**
  * Created by prempal on 3/2/20.
  */
-data class PullRequestsResponse(
+data class PullRequest(
     @SerializedName("closed_at")
     val closedAt: String,
     @SerializedName("created_at")

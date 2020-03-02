@@ -3,9 +3,13 @@ package com.prempal.ringtail.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.prempal.ringtail.R
 import com.prempal.ringtail.data.ApiService
+import com.prempal.ringtail.data.PullRequest
 import com.prempal.ringtail.utils.Event
 import com.prempal.ringtail.utils.coroutines.DispatcherProvider
+import kotlinx.coroutines.launch
 
 /**
  * Created by prempal on 3/2/20.
@@ -15,13 +19,42 @@ class MainViewModel(
     private val dispatcherProvider: DispatcherProvider
 ) : ViewModel() {
 
+    private val _items = MutableLiveData<List<PullRequest>>()
+    val items: LiveData<List<PullRequest>> = _items
+
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
 
     private val _toastEvent = MutableLiveData<Event<Int>>()
     val toastEvent: LiveData<Event<Int>> = _toastEvent
 
-    init {
+    private var page = 1
+    private var loadMoreEnabled = false
 
+    init {
+        fetchPRs()
+    }
+
+    fun onLoadMore() {
+        if (_loading.value !== null && _loading.value == false && loadMoreEnabled) fetchPRs()
+    }
+
+    private fun fetchPRs() {
+        _loading.postValue(true)
+        viewModelScope.launch {
+            try {
+                val response = apiService.getClosedPRs(page)
+                val pullRequestsResponse = response.body()
+                if (response.isSuccessful && pullRequestsResponse != null) {
+                    _items.postValue(pullRequestsResponse)
+                } else {
+                    _toastEvent.postValue(Event(R.string.error_fetching_prs))
+                }
+            } catch (e: Exception) {
+                _toastEvent.postValue(Event(R.string.error_fetching_prs))
+            } finally {
+                _loading.postValue(false)
+            }
+        }
     }
 }

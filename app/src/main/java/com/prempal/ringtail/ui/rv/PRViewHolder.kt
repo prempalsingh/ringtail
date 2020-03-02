@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.prempal.ringtail.R
-import com.prempal.ringtail.data.PullRequestsResponse
+import com.prempal.ringtail.data.PullRequest
 
 /**
  * Created by prempal on 3/2/20.
@@ -32,7 +32,7 @@ class PRViewHolder private constructor(v: View) : RecyclerView.ViewHolder(v) {
         }
     }
 
-    fun bind(pr: PullRequestsResponse) {
+    fun bind(pr: PullRequest) {
         Glide.with(itemView.context)
             .load(pr.user.avatarUrl)
             .placeholder(ColorDrawable(Color.LTGRAY))
