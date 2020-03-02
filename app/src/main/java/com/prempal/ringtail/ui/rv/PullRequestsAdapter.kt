@@ -10,11 +10,12 @@ import com.prempal.ringtail.data.PullRequestsResponse
  */
 class PullRequestsAdapter : ListAdapter<PullRequestsResponse, PRViewHolder>(PRDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PRViewHolder {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return PRViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: PRViewHolder, position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val pr = getItem(position)
+        holder.bind(pr)
     }
 }
 
